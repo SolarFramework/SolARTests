@@ -39,7 +39,7 @@ namespace SolAR {
         org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/none.xml");
 
 
-        BOOST_TEST(retCode==org::bcom::xpcf::_ERROR_MODULE_UNKNOWN,"SOLAR ERROR: xpcfComponentManager should return _ERROR_MODULE_UNKNOWN but returns " << retCode );
+        BOOST_TEST(retCode==org::bcom::xpcf::_FAIL,"SOLAR ERROR: xpcfComponentManager should return _ERROR_MODULE_UNKNOWN but returns " << retCode );
 
     }
 
