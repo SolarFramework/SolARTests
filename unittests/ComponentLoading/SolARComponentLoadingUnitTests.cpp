@@ -478,7 +478,7 @@ BOOST_AUTO_TEST_CASE(TestLoadImageConvertorOpencvDynamic)
 
 }
 
-BOOST_AUTO_TEST_CASE(TestImageFilterOpencvCameraDynamic)
+BOOST_AUTO_TEST_CASE(TestImageFilterBinaryOpencvCameraDynamic)
 {
 
 #if NDEBUG
@@ -495,11 +495,104 @@ BOOST_AUTO_TEST_CASE(TestImageFilterOpencvCameraDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARImageFilterOpencv>()->bindTo<api::image::IImageFilter>();
+    auto component = xpcfComponentManager->create<SolARImageFilterBinaryOpencv>()->bindTo<api::image::IImageFilter>();
 
-    BOOST_TEST(component,"SOLAR ERROR: Image Filter Opencv component could not be created in dynamic mode");
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Binary Opencv component could not be created in dynamic mode");
 
 }
+
+BOOST_AUTO_TEST_CASE(TestImageFilterAdaptiveBinaryOpencvCameraDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolARImageFilterAdaptiveBinaryOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Adaptive Binary Opencv component could not be created in dynamic mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterBlurOpencvCameraDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolARImageFilterBlurOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Blur Opencv component could not be created in dynamic mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterDilateOpencvCameraDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolARImageFilterDilateOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Dilate Opencv component could not be created in dynamic mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterErodeOpencvCameraDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolARImageFilterErodeOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Erode Opencv component could not be created in dynamic mode");
+
+}
+
 
 BOOST_AUTO_TEST_CASE(TestLoadImageLoaderOpencvDynamic)
 {
