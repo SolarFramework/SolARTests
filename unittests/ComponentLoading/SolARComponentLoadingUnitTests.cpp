@@ -869,7 +869,11 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 #include "SolARHomographyEstimationOpencv.h"
 #include "SolARHomographyMatrixDecompositionOpencv.h"
 #include "SolARImageConvertorOpencv.h"
-#include "SolARImageFilterOpencv.h"
+#include "SolARImageFilterBinaryOpencv.h"
+#include "SolARImageFilterAdaptiveBinaryOpencv.h"
+#include "SolARImageFilterBlurOpencv.h"
+#include "SolARImageFilterDilateOpencv.h"
+#include "SolARImageFilterErodeOpencv.h"
 #include "SolARImageLoaderOpencv.h"
 #include "SolARImageViewerOpencv.h"
 #include "SolARKeypointDetectorOpencv.h"
@@ -1139,7 +1143,7 @@ BOOST_AUTO_TEST_CASE(TestLoadImageConvertorOpencvStatic)
 
 }
 
-BOOST_AUTO_TEST_CASE(TestImageFilterOpencvCameraStatic)
+BOOST_AUTO_TEST_CASE(TestImageFilterBinaryOpencvCameraStatic)
 {
 
 #if NDEBUG
@@ -1147,9 +1151,65 @@ BOOST_AUTO_TEST_CASE(TestImageFilterOpencvCameraStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolARImageFilterOpencv>()->bindTo<api::image::IImageFilter>();
+    auto component =xpcf::ComponentFactory::createInstance<SolARImageFilterBinaryOpencv>()->bindTo<api::image::IImageFilter>();
 
-    BOOST_TEST(component,"SOLAR ERROR: Image Filter Opencv component could not be created in static mode");
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Binary Opencv component could not be created in static mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterAdaptiveBinaryOpencvCameraStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARImageFilterAdaptiveBinaryOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Adaptive Binary Opencv component could not be created in static mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterBlurOpencvCameraStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARImageFilterBlurOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Blur Opencv component could not be created in static mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterDilateOpencvCameraStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARImageFilterDilateOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Dilate Opencv component could not be created in static mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestImageFilterErodeOpencvCameraStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARImageFilterErodeOpencv>()->bindTo<api::image::IImageFilter>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Image Filter Erode Opencv component could not be created in static mode");
 
 }
 
