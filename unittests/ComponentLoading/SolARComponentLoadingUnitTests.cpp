@@ -2,8 +2,7 @@
 
 
 #include <boost/log/core.hpp>
-#include "IComponentManager.h"
-#include "ComponentFactory.h"
+#include "xpcf/xpcf.h"
 #include <boost/test/unit_test.hpp>
 
 #include "SolARModuleOpencv_traits.h"
