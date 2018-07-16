@@ -2,7 +2,7 @@
 
 
 #include <boost/log/core.hpp>
-#include "IComponentManager.h"
+#include "xpcf/xpcf.h"
 #include <boost/test/unit_test.hpp>
 
 namespace xpcf  = org::bcom::xpcf;
