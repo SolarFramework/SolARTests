@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(TestLoad3DOverlayDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolAR3DOverlayOpencv>()->bindTo<api::display::I3DOverlay>();
+    auto component = xpcfComponentManager->create<SolAR3DOverlayBoxOpencv>()->bindTo<api::display::I3DOverlay>();
 
     BOOST_TEST(component,"SOLAR ERROR: 3DOverlay component could not be created in dynamic mode");
 
@@ -852,7 +852,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 
 
 #include "SolAR2DOverlayOpencv.h"
-#include "SolAR3DOverlayOpencv.h"
+#include "SolAR3DOverlayBoxOpencv.h"
 #include "SolARCameraCalibrationOpencv.h"
 #include "SolARCameraOpencv.h"
 #include "SolARContoursExtractorOpencv.h"
@@ -867,7 +867,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 #include "SolARFundamentalMatrixEstimationOpencv.h"
 #include "SolARGeometricMatchesFilterOpencv.h"
 #include "SolARHomographyEstimationOpencv.h"
-#include "SolARHomographyMatrixDecompositionOpencv.h"
+#include "SolARHomographyMatrixDecomposerOpencv.h"
 #include "SolARImageConvertorOpencv.h"
 #include "SolARImageFilterBinaryOpencv.h"
 #include "SolARImageFilterAdaptiveBinaryOpencv.h"
@@ -912,7 +912,7 @@ BOOST_AUTO_TEST_CASE(TestLoad3DOverlayStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolAR3DOverlayOpencv>()->bindTo<api::display::I3DOverlay>();
+    auto component =xpcf::ComponentFactory::createInstance<SolAR3DOverlayBoxOpencv>()->bindTo<api::display::I3DOverlay>();
 
     BOOST_TEST(component,"SOLAR ERROR: 3DOverlay component could not be created in static mode");
 
