@@ -21,7 +21,7 @@ namespace SolAR {
 
        // org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
 
-          org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("D:/DEV/SolAR/sources/SolARTests/unittests/ModuleLoading/xpcf_SolARModuleOpenCV_registry.xml");
+          org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
 //D:\DEV\SolAR\sources\Modules\SolARModuleOpenCV\
 
         BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
@@ -58,7 +58,7 @@ namespace SolAR {
         // load library
         SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
 
-       org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("D:/DEV/SolAR/sources/SolARTests/unittests/ModuleLoading/xpcf_SolARModuleOpenCVSyntaxError_registry.xml");
+       org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("xpcf_SolARModuleOpenCVSyntaxError_registry.xml");
 
         BOOST_TEST(retCode==org::bcom::xpcf::_FAIL,"SOLAR ERROR: xpcfComponentManager should return _ERROR_MODULE_UNKNOWN but returns " << retCode );
 
@@ -76,7 +76,7 @@ namespace SolAR {
         // load library
         SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
 
-       org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("D:/DEV/SolAR/sources/SolARTests/unittests/ModuleLoading/xpcf_SolARModuleOpenCVNonExistingDLL_registry.xml");
+       org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("xpcf_SolARModuleOpenCVNonExistingDLL_registry.xml");
 
         BOOST_TEST(retCode==org::bcom::xpcf::_FAIL,"SOLAR ERROR: xpcfComponentManager should return _ERROR_MODULE_UNKNOWN but returns " << retCode );
 
