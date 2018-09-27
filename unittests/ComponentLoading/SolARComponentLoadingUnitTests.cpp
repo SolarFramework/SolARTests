@@ -710,51 +710,6 @@ BOOST_AUTO_TEST_CASE(TestLoadKeypointDetectorOpencvDynamic)
 
 }
 
-BOOST_AUTO_TEST_CASE(TestLoadMapFilterOpencvDynamic)
-{
-
-#if NDEBUG
-    boost::log::core::get()->set_logging_enabled(false);
-#endif
-
-
-        // load library
-    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
-
-    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
-
-
-    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
-
-
-    auto component = xpcfComponentManager->create<SolARMapFilterOpencv>()->bindTo<api::solver::map::IMapFilter>();
-
-    BOOST_TEST(component,"SOLAR ERROR: Map Filter Opencv component could not be created in dynamic mode");
-
-}
-
-BOOST_AUTO_TEST_CASE(TestLoadMapperOpencvDynamic)
-{
-
-#if NDEBUG
-    boost::log::core::get()->set_logging_enabled(false);
-#endif
-
-
-        // load library
-    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
-
-    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
-
-
-    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
-
-
-    auto component = xpcfComponentManager->create<SolARMapperOpencv>()->bindTo<api::solver::map::IMapper>();
-
-    BOOST_TEST(component,"SOLAR ERROR: Mapper Opencv component could not be created in dynamic mode");
-
-}
 
 BOOST_AUTO_TEST_CASE(TestLoadMarker2DNaturalImageOpencvDynamic)
 {
@@ -1018,8 +973,6 @@ BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvDynamic)
 #include "SolARImagesAsCameraOpencv.h"
 #include "SolARImageViewerOpencv.h"
 #include "SolARKeypointDetectorOpencv.h"
-#include "SolARMapFilterOpencv.h"
-#include "SolARMapperOpencv.h"
 #include "SolARMarker2DNaturalImageOpencv.h"
 #include "SolARMarker2DSquaredBinaryOpencv.h"
 #include "SolARPerspectiveControllerOpencv.h"
@@ -1426,34 +1379,6 @@ BOOST_AUTO_TEST_CASE(TestLoadKeypointDetectorOpencvStatic)
     auto component =xpcf::ComponentFactory::createInstance<SolARKeypointDetectorOpencv>()->bindTo<api::features::IKeypointDetector>();
 
     BOOST_TEST(component,"SOLAR ERROR: Keypoint Detector Opencv component could not be created in static mode");
-
-}
-
-BOOST_AUTO_TEST_CASE(TestLoadMapFilterOpencvStatic)
-{
-
-#if NDEBUG
-    boost::log::core::get()->set_logging_enabled(false);
-#endif
-
-
-    auto component =xpcf::ComponentFactory::createInstance<SolARMapFilterOpencv>()->bindTo<api::solver::map::IMapFilter>();
-
-    BOOST_TEST(component,"SOLAR ERROR: MapFilter Opencv component could not be created in static mode");
-
-}
-
-BOOST_AUTO_TEST_CASE(TestLoadMapperOpencvStatic)
-{
-
-#if NDEBUG
-    boost::log::core::get()->set_logging_enabled(false);
-#endif
-
-
-    auto component =xpcf::ComponentFactory::createInstance<SolARMapperOpencv>()->bindTo<api::solver::map::IMapper>();
-
-    BOOST_TEST(component,"SOLAR ERROR: Mapper Opencv component could not be created in static mode");
 
 }
 
