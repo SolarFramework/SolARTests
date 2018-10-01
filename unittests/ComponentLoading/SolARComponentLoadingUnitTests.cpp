@@ -13,7 +13,6 @@
 #include "api/features/IDescriptorMatcher.h"
 #include "api/features/IDescriptorsExtractor.h"
 #include "api/features/IMatchesFilter.h"
-#include "api/features/IMatchesFilter.h"
 #include "api/solver/pose/I2DTransformFinder.h"
 #include "api/solver/pose/IHomographyValidation.h"
 #include "api/features/IKeypointsReIndexer.h"
@@ -677,9 +676,7 @@ BOOST_AUTO_TEST_CASE(TestLoadImageViewerOpencvDynamic)
 
     org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
 
-
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
-
 
     auto component = xpcfComponentManager->create<SolARImageViewerOpencv>()->bindTo<api::display::IImageViewer>();
 
@@ -700,9 +697,7 @@ BOOST_AUTO_TEST_CASE(TestLoadKeypointDetectorOpencvDynamic)
 
     org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
 
-
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
-
 
     auto component = xpcfComponentManager->create<SolARKeypointDetectorOpencv>()->bindTo<api::features::IKeypointDetector>();
 
@@ -820,7 +815,7 @@ BOOST_AUTO_TEST_CASE(TestLoadPoseEstimationPnpOpencvDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARPoseEstimationPnpOpencv>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D2D>();
+    auto component = xpcfComponentManager->create<SolARPoseEstimationPnpOpencv>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D3D>();
 
     BOOST_TEST(component,"SOLAR ERROR: Pose Estimation Pnp Opencv component could not be created in dynamic mode");
 
