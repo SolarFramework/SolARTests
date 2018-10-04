@@ -13,13 +13,14 @@
 #include "api/features/IDescriptorMatcher.h"
 #include "api/features/IDescriptorsExtractor.h"
 #include "api/features/IMatchesFilter.h"
-#include "api/features/IMatchesFilter.h"
 #include "api/solver/pose/I2DTransformFinder.h"
 #include "api/solver/pose/IHomographyValidation.h"
 #include "api/features/IKeypointsReIndexer.h"
-#include "api/solver/pose/I3DTransformFinder.h"
+#include "api/solver/pose/I3DTransformFinderFrom2D2D.h"
+#include "api/solver/pose/I3DTransformFinderFrom2D3D.h"
+#include "api/solver/pose/I2D3DCorrespondencesFinder.h"
 #include "api/display/I2DOverlay.h"
-#include "api/display/ISideBySideOverlay.h"
+#include "api/display/IMatchesOverlay.h"
 #include "api/display/I3DOverlay.h"
 #include "api/geom/IImage2WorldMapper.h"
 #include "api/geom/I2DTransform.h"
@@ -27,12 +28,15 @@
 #include "api/features/IContoursFilter.h"
 #include "api/features/IDescriptorsExtractorSBPattern.h"
 #include "api/solver/pose/I2Dto3DTransformDecomposer.h"
+#include "api/solver/pose/I3DTransformFinderFrom2D2D.h"
 #include "api/image/IImageConvertor.h"
 #include "api/image/IImageFilter.h"
 #include "api/image/IImageLoader.h"
 #include "api/input/files/IMarker2DSquaredBinary.h"
 #include "api/image/IPerspectiveController.h"
 #include "api/solver/map/ITriangulator.h"
+#include "api/solver/map/IMapFilter.h"
+#include "api/solver/map/IMapper.h"
 #include "api/input/devices/ICameraCalibration.h"
 
 
@@ -61,7 +65,27 @@ BOOST_AUTO_TEST_CASE(TestLoadModule)
 
 }
 
+BOOST_AUTO_TEST_CASE(TestLoad2D3DcorrespondenciesFinderDynamic)
+{
 
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+    // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolAR2D3DCorrespondencesFinderOpencv>()->bindTo<api::solver::pose::I2D3DCorrespondencesFinder>();
+
+    BOOST_TEST(component,"SOLAR ERROR: 2D3DCorrespondencesFinder component could not be created in dynamic mode");
+
+}
 
 BOOST_AUTO_TEST_CASE(TestLoad2DOverlayDynamic)
 {
@@ -102,7 +126,7 @@ BOOST_AUTO_TEST_CASE(TestLoad3DOverlayDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolAR3DOverlayOpencv>()->bindTo<api::display::I3DOverlay>();
+    auto component = xpcfComponentManager->create<SolAR3DOverlayBoxOpencv>()->bindTo<api::display::I3DOverlay>();
 
     BOOST_TEST(component,"SOLAR ERROR: 3DOverlay component could not be created in dynamic mode");
 
@@ -448,7 +472,7 @@ BOOST_AUTO_TEST_CASE(TestLoadHomographyMatrixDecomposerOpencvDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARHomographyMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2DTO3DTransformDecomposer>();
+    auto component = xpcfComponentManager->create<SolARHomographyMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2Dto3DTransformDecomposer>();
 
     BOOST_TEST(component,"SOLAR ERROR: Homography Matrix Decomposer Opencv component could not be created in dynamic mode");
 
@@ -616,7 +640,7 @@ BOOST_AUTO_TEST_CASE(TestLoadImageLoaderOpencvDynamic)
 
 }
 
-BOOST_AUTO_TEST_CASE(TestLoadImageViewerOpencvDynamic)
+BOOST_AUTO_TEST_CASE(TestLoadImagesAsCameraOpencvDynamic)
 {
 
 #if NDEBUG
@@ -632,6 +656,27 @@ BOOST_AUTO_TEST_CASE(TestLoadImageViewerOpencvDynamic)
 
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
+
+    auto component = xpcfComponentManager->create<SolARImagesAsCameraOpencv>()->bindTo<api::input::devices::ICamera>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Images As Camera Opencv component could not be created in dynamic mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadImageViewerOpencvDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
     auto component = xpcfComponentManager->create<SolARImageViewerOpencv>()->bindTo<api::display::IImageViewer>();
 
@@ -652,15 +697,14 @@ BOOST_AUTO_TEST_CASE(TestLoadKeypointDetectorOpencvDynamic)
 
     org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
 
-
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
-
 
     auto component = xpcfComponentManager->create<SolARKeypointDetectorOpencv>()->bindTo<api::features::IKeypointDetector>();
 
     BOOST_TEST(component,"SOLAR ERROR: Keypoint Detector Opencv component could not be created in dynamic mode");
 
 }
+
 
 BOOST_AUTO_TEST_CASE(TestLoadMarker2DNaturalImageOpencvDynamic)
 {
@@ -748,7 +792,7 @@ BOOST_AUTO_TEST_CASE(TestLoadPoseEstimationPnpEPFLDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARPoseEstimationPnpEPFL>()->bindTo<api::solver::pose::I3DTransformFinder>();
+    auto component = xpcfComponentManager->create<SolARPoseEstimationPnpEPFL>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D3D>();
 
     BOOST_TEST(component,"SOLAR ERROR: Pose Estimation Pnp EPFL component could not be created in dynamic mode");
 
@@ -771,13 +815,13 @@ BOOST_AUTO_TEST_CASE(TestLoadPoseEstimationPnpOpencvDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARPoseEstimationPnpOpencv>()->bindTo<api::solver::pose::I3DTransformFinder>();
+    auto component = xpcfComponentManager->create<SolARPoseEstimationPnpOpencv>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D3D>();
 
     BOOST_TEST(component,"SOLAR ERROR: Pose Estimation Pnp Opencv component could not be created in dynamic mode");
 
 }
 
-BOOST_AUTO_TEST_CASE(TestLoadSideBySideOverlayOpencvDynamic)
+BOOST_AUTO_TEST_CASE(TestLoadSolARPoseFinderFrom2D2DOpencvDynamic)
 {
 
 #if NDEBUG
@@ -794,9 +838,32 @@ BOOST_AUTO_TEST_CASE(TestLoadSideBySideOverlayOpencvDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARSideBySideOverlayOpencv>()->bindTo<api::display::ISideBySideOverlay>();
+    auto component = xpcfComponentManager->create<SolARPoseFinderFrom2D2DOpencv>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D2D>();
 
-    BOOST_TEST(component,"SOLAR ERROR: Side By Side Overlay Opencv component could not be created in dynamic mode");
+    BOOST_TEST(component,"SOLAR ERROR: Pose Finder From 2D2DOpencv component could not be created in dynamic mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadMatchesOverlayOpencvDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolARMatchesOverlayOpencv>()->bindTo<api::display::IMatchesOverlay>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Matches Overlay Opencv component could not be created in dynamic mode");
 
 }
 
@@ -817,7 +884,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDFundamentalMatrixDecomposerOpencvDynamic)
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 
 
-    auto component = xpcfComponentManager->create<SolARSVDFundamentalMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2DTO3DTransformDecomposer>();
+    auto component = xpcfComponentManager->create<SolARSVDFundamentalMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2Dto3DTransformDecomposer>();
 
     BOOST_TEST(component,"SOLAR ERROR: SVD Fundamental Matrix Decomposer Opencv component could not be created in dynamic mode");
 
@@ -846,13 +913,36 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 
 }
 
+BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+
+    auto component = xpcfComponentManager->create<SolARVideoAsCameraOpencv>()->bindTo<api::input::devices::ICamera>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Video As Camera Opencv component could not be created in dynamic mode");
+
+}
+
 
 
 // Static Part
 
-
+#include "SolAR2D3DcorrespondencesFinderOpencv.h"
 #include "SolAR2DOverlayOpencv.h"
-#include "SolAR3DOverlayOpencv.h"
+#include "SolAR3DOverlayBoxOpencv.h"
 #include "SolARCameraCalibrationOpencv.h"
 #include "SolARCameraOpencv.h"
 #include "SolARContoursExtractorOpencv.h"
@@ -867,7 +957,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 #include "SolARFundamentalMatrixEstimationOpencv.h"
 #include "SolARGeometricMatchesFilterOpencv.h"
 #include "SolARHomographyEstimationOpencv.h"
-#include "SolARHomographyMatrixDecompositionOpencv.h"
+#include "SolARHomographyMatrixDecomposerOpencv.h"
 #include "SolARImageConvertorOpencv.h"
 #include "SolARImageFilterBinaryOpencv.h"
 #include "SolARImageFilterAdaptiveBinaryOpencv.h"
@@ -875,6 +965,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 #include "SolARImageFilterDilateOpencv.h"
 #include "SolARImageFilterErodeOpencv.h"
 #include "SolARImageLoaderOpencv.h"
+#include "SolARImagesAsCameraOpencv.h"
 #include "SolARImageViewerOpencv.h"
 #include "SolARKeypointDetectorOpencv.h"
 #include "SolARMarker2DNaturalImageOpencv.h"
@@ -882,12 +973,29 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 #include "SolARPerspectiveControllerOpencv.h"
 #include "SolARPoseEstimationPnpEPFL.h"
 #include "SolARPoseEstimationPnpOpencv.h"
-#include "SolARSideBySideOverlayOpencv.h"
+#include "SolARPoseFinderFrom2D2DOpencv.h"
+#include "SolARPoseFinderFrom2D2DOpencv.h"
+#include "SolARMatchesOverlayOpencv.h"
 #include "SolARSVDFundamentalMatrixDecomposerOpencv.h"
 #include "SolARSVDTriangulationOpencv.h"
+#include "SolARVideoAsCameraOpencv.h"
 
 #include "SolARCameraOpencv.h"
 using namespace SolAR::MODULES::OPENCV;
+
+BOOST_AUTO_TEST_CASE(TestLoad2D3DCorrespondencesFinderStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolAR2D3DCorrespondencesFinderOpencv>()->bindTo<api::solver::pose::I2D3DCorrespondencesFinder>();
+
+    BOOST_TEST(component,"SOLAR ERROR: 2D3DCorrespondencesFinder component could not be created in static mode");
+
+}
 
 
 BOOST_AUTO_TEST_CASE(TestLoad2DOverlayStatic)
@@ -912,7 +1020,7 @@ BOOST_AUTO_TEST_CASE(TestLoad3DOverlayStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolAR3DOverlayOpencv>()->bindTo<api::display::I3DOverlay>();
+    auto component =xpcf::ComponentFactory::createInstance<SolAR3DOverlayBoxOpencv>()->bindTo<api::display::I3DOverlay>();
 
     BOOST_TEST(component,"SOLAR ERROR: 3DOverlay component could not be created in static mode");
 
@@ -1123,7 +1231,7 @@ BOOST_AUTO_TEST_CASE(TestLoadHomographyMatrixDecomposerOpencvStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolARHomographyMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2DTO3DTransformDecomposer>();
+    auto component =xpcf::ComponentFactory::createInstance<SolARHomographyMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2Dto3DTransformDecomposer>();
 
     BOOST_TEST(component,"SOLAR ERROR: Homography Matrix Decomposer Opencv component could not be created in static mode");
 
@@ -1227,6 +1335,20 @@ BOOST_AUTO_TEST_CASE(TestLoadImageLoaderOpencvStatic)
 
 }
 
+BOOST_AUTO_TEST_CASE(TestLoadImagesAsCameraOpencvStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARImagesAsCameraOpencv>()->bindTo<api::input::devices::ICamera>();
+
+    BOOST_TEST(component,"SOLAR ERROR: ImagesAsCamera Opencv component could not be created in static mode");
+
+}
+
 BOOST_AUTO_TEST_CASE(TestLoadImageViewerOpencvStatic)
 {
 
@@ -1305,7 +1427,7 @@ BOOST_AUTO_TEST_CASE(TestLoadPoseEstimationPnpEPFLStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolARPoseEstimationPnpEPFL>()->bindTo<api::solver::pose::I3DTransformFinder>();
+    auto component =xpcf::ComponentFactory::createInstance<SolARPoseEstimationPnpEPFL>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D3D>();
 
     BOOST_TEST(component,"SOLAR ERROR: Pose Estimation Pnp EPFL component could not be created in static mode");
 
@@ -1319,13 +1441,13 @@ BOOST_AUTO_TEST_CASE(TestLoadPoseEstimationPnpOpencvStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolARPoseEstimationPnpOpencv>()->bindTo<api::solver::pose::I3DTransformFinder>();
+    auto component =xpcf::ComponentFactory::createInstance<SolARPoseEstimationPnpOpencv>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D3D>();
 
     BOOST_TEST(component,"SOLAR ERROR: Pose Estimation Pnp Opencv component could not be created in static mode");
 
 }
 
-BOOST_AUTO_TEST_CASE(TestLoadSideBySideOverlayOpencvStatic)
+BOOST_AUTO_TEST_CASE(TestLoadPoseEstimationFrom2D2DStatic)
 {
 
 #if NDEBUG
@@ -1333,7 +1455,21 @@ BOOST_AUTO_TEST_CASE(TestLoadSideBySideOverlayOpencvStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolARSideBySideOverlayOpencv>()->bindTo<api::display::ISideBySideOverlay>();
+    auto component =xpcf::ComponentFactory::createInstance<SolARPoseFinderFrom2D2DOpencv>()->bindTo<api::solver::pose::I3DTransformFinderFrom2D2D>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Pose Finder From 2D 2D Opencv component could not be created in static mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadMatchesOverlayOpencvStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARMatchesOverlayOpencv>()->bindTo<api::display::IMatchesOverlay>();
 
     BOOST_TEST(component,"SOLAR ERROR: Side By Side Overlay Opencv component could not be created in static mode");
 
@@ -1347,7 +1483,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDFundamentalMatrixDecomposerOpencvStatic)
 #endif
 
 
-    auto component =xpcf::ComponentFactory::createInstance<SolARSVDFundamentalMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2DTO3DTransformDecomposer>();
+    auto component =xpcf::ComponentFactory::createInstance<SolARSVDFundamentalMatrixDecomposerOpencv>()->bindTo<api::solver::pose::I2Dto3DTransformDecomposer>();
 
     BOOST_TEST(component,"SOLAR ERROR: SVD Fundamental Matrix Decomposer Opencv component could not be created in static mode");
 
@@ -1364,6 +1500,20 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvStatic)
     auto component =xpcf::ComponentFactory::createInstance<SolARSVDTriangulationOpencv>()->bindTo<api::solver::map::ITriangulator>();
 
     BOOST_TEST(component,"SOLAR ERROR: SVD Triangulation Opencv component could not be created in static mode");
+
+}
+
+BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvStatic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+
+    auto component =xpcf::ComponentFactory::createInstance<SolARVideoAsCameraOpencv>()->bindTo<api::input::devices::ICamera>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Video As Camera Opencv component could not be created in static mode");
 
 }
 
