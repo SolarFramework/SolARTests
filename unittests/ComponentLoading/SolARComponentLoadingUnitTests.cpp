@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE SolARModuleOpenCVUnitTests
+#define BOOST_TEST_MODULE SolARModulUnitTests
 
 
 #include <boost/log/core.hpp>
@@ -913,6 +913,7 @@ BOOST_AUTO_TEST_CASE(TestLoadSVDTriangulationOpencvDynamic)
 
 }
 
+
 BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvDynamic)
 {
 
@@ -936,8 +937,30 @@ BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvDynamic)
 
 }
 
+#include "SolARModuleCeres_traits.h"
+#include "api/solver/map/IBundler.h"
+using namespace SolAR::MODULES::CERES;
+
+BOOST_AUTO_TEST_CASE(TestBundleAdjustmentCeresDynamic)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
 
 
+        // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleCeres_registry.xml");
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+
+    auto component =xpcfComponentManager->create<SolARBundlerCeres>()->bindTo<api::solver::map::IBundler>();
+
+    BOOST_TEST(component,"SOLAR ERROR: Bundler from Ceres component could not be created in dynamic mode");
+
+}
 // Static Part
 
 #include "SolAR2D3DcorrespondencesFinderOpencv.h"
