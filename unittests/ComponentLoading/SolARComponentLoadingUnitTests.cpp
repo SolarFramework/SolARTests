@@ -958,9 +958,13 @@ BOOST_AUTO_TEST_CASE(TestBundleAdjustmentCeresDynamic)
 
     auto component =xpcfComponentManager->create<SolARBundlerCeres>()->bindTo<api::solver::map::IBundler>();
 
+    printf(" Bravo \n");
+
     BOOST_TEST(component,"SOLAR ERROR: Bundler from Ceres component could not be created in dynamic mode");
 
 }
+
+#if 0
 // Static Part
 
 #include "SolAR2D3DcorrespondencesFinderOpencv.h"
@@ -1541,4 +1545,4 @@ BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvStatic)
 }
 
 
-
+#endif
