@@ -9,21 +9,85 @@ namespace xpcf  = org::bcom::xpcf;
 
 namespace SolAR {
 
-    BOOST_AUTO_TEST_CASE(TestLoadModule)
-    {
+BOOST_AUTO_TEST_CASE(TestLoadModuleOpenCV)
+{
 
-    #if NDEBUG
-        boost::log::core::get()->set_logging_enabled(false);
-    #endif
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
 
-        // load library
-        SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+    // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
 
-        org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenCV_registry.xml");
 
 
-        BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
-    }
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadModuleOpenGL)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+    // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleOpenGL_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadModulCeres)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+    // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleCeres_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadModuleFBOW)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+    // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleFBOW_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+}
+
+BOOST_AUTO_TEST_CASE(TestLoadModuleNonFreeOpenCv)
+{
+
+#if NDEBUG
+    boost::log::core::get()->set_logging_enabled(false);
+#endif
+
+    // load library
+    SRef<xpcf::IComponentManager> xpcfComponentManager = xpcf::getComponentManagerInstance();
+
+    org::bcom::xpcf::XPCFErrorCode retCode= xpcfComponentManager->load("$BCOMDEVROOT/.xpcf/SolAR/xpcf_SolARModuleNonFreeOpenCV_registry.xml");
+
+
+    BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
+}
 
     /* this test uses an XML file that does not exist*/
     /* this test should fail*/
