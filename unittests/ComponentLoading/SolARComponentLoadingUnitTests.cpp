@@ -936,7 +936,7 @@ BOOST_AUTO_TEST_CASE(TestVideoAsCameraOpencvDynamic)
     BOOST_TEST(component,"SOLAR ERROR: Video As Camera Opencv component could not be created in dynamic mode");
 
 }
-
+/*
 #include "SolARModuleCeres_traits.h"
 #include "api/solver/map/IBundler.h"
 using namespace SolAR::MODULES::CERES;
@@ -963,7 +963,7 @@ BOOST_AUTO_TEST_CASE(TestBundleAdjustmentCeresDynamic)
     BOOST_TEST(component,"SOLAR ERROR: Bundler from Ceres component could not be created in dynamic mode");
 
 }
-
+*/
 #if 0
 // Static Part
 
