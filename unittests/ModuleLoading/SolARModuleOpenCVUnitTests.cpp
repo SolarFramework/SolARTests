@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(TestLoadModuleOpenGL)
 
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 }
-
+/*
 BOOST_AUTO_TEST_CASE(TestLoadModulCeres)
 {
 
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(TestLoadModulCeres)
 
     BOOST_TEST(retCode==org::bcom::xpcf::_SUCCESS,"SOLAR ERROR: xpcfComponentManager could not be opened");
 }
-
+*/
 BOOST_AUTO_TEST_CASE(TestLoadModuleFBOW)
 {
 
